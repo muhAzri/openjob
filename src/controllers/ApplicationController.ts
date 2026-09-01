@@ -11,7 +11,7 @@ export class ApplicationController {
     res.status(201).json({
       status: 'success',
       message: 'Lamaran berhasil ditambahkan',
-      data: { application },
+      data: application,
     });
   };
 
@@ -28,7 +28,7 @@ export class ApplicationController {
     const application = await this.applicationService.getById(id);
     res.status(200).json({
       status: 'success',
-      data: { application },
+      data: application,
     });
   };
 
@@ -57,7 +57,7 @@ export class ApplicationController {
     res.status(200).json({
       status: 'success',
       message: 'Status lamaran berhasil diperbarui',
-      data: { application },
+      data: application,
     });
   };
 

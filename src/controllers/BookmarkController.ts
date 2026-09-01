@@ -12,7 +12,7 @@ export class BookmarkController {
     res.status(201).json({
       status: 'success',
       message: 'Bookmark berhasil ditambahkan',
-      data: { bookmark },
+      data: bookmark,
     });
   };
 
@@ -23,7 +23,7 @@ export class BookmarkController {
     const bookmark = await this.bookmarkService.getDetail(userId, jobId, id);
     res.status(200).json({
       status: 'success',
-      data: { bookmark },
+      data: bookmark,
     });
   };
 

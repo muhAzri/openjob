@@ -34,19 +34,35 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
       references: 'users',
       onDelete: 'CASCADE',
     },
-    location: {
+    location_city: {
       type: 'varchar(150)',
     },
-    employment_type: {
+    location_type: {
+      type: 'varchar(30)',
+    },
+    job_type: {
       type: 'varchar(50)',
       notNull: true,
       default: 'full-time',
+    },
+    experience_level: {
+      type: 'varchar(30)',
     },
     salary_min: {
       type: 'integer',
     },
     salary_max: {
       type: 'integer',
+    },
+    is_salary_visible: {
+      type: 'boolean',
+      notNull: true,
+      default: true,
+    },
+    status: {
+      type: 'varchar(20)',
+      notNull: true,
+      default: 'open',
     },
     created_at: {
       type: 'timestamptz',

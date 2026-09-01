@@ -18,6 +18,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
     },
     location: {
       type: 'varchar(150)',
+      notNull: true,
     },
     owner_id: {
       type: 'uuid',

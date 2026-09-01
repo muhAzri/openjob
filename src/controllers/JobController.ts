@@ -12,7 +12,7 @@ export class JobController {
     res.status(201).json({
       status: 'success',
       message: 'Job berhasil ditambahkan',
-      data: { job },
+      data: job,
     });
   };
 
@@ -30,7 +30,7 @@ export class JobController {
     const job = await this.jobService.getById(id);
     res.status(200).json({
       status: 'success',
-      data: { job },
+      data: job,
     });
   };
 
@@ -59,7 +59,7 @@ export class JobController {
     res.status(200).json({
       status: 'success',
       message: 'Job berhasil diperbarui',
-      data: { job },
+      data: job,
     });
   };
 

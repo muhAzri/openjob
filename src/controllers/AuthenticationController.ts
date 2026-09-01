@@ -7,7 +7,7 @@ export class AuthenticationController {
 
   public postAuthentication = async (req: Request, res: Response): Promise<void> => {
     const { accessToken, refreshToken } = await this.authenticationService.login(req.body);
-    res.status(201).json({
+    res.status(200).json({
       status: 'success',
       message: 'Authentication berhasil ditambahkan',
       data: { accessToken, refreshToken },

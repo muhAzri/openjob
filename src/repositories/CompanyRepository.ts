@@ -3,16 +3,19 @@ import type { Database } from '../config/Database';
 import type { Company } from '../domain/entities/Company';
 import type { CreateCompanyPayload, UpdateCompanyPayload } from '../domain/dto/CompanyDto';
 import { InvariantError, NotFoundError } from '../errors';
+import { isValidUuid } from '../utils/Uuid';
 
 interface CompanyRow extends QueryResultRow {
   id: string;
   name: string;
   description: string | null;
-  location: string | null;
+  location: string;
   owner_id: string;
   created_at: Date;
   updated_at: Date;
 }
+
+const SELECT_COLUMNS = 'id, name, description, location, owner_id, created_at, updated_at';
 
 export class CompanyRepository {
   constructor(private readonly database: Database) {}
@@ -21,27 +24,31 @@ export class CompanyRepository {
     const result = await this.database.query<CompanyRow>(
       `INSERT INTO companies (name, description, location, owner_id)
        VALUES ($1, $2, $3, $4)
-       RETURNING id, name, description, location, owner_id, created_at, updated_at`,
-      [payload.name, payload.description ?? null, payload.location ?? null, ownerId],
+       RETURNING ${SELECT_COLUMNS}`,
+      [payload.name, payload.description ?? null, payload.location, ownerId],
     );
 
     const row = result.rows[0];
     if (row === undefined) {
       throw new InvariantError('Gagal menambahkan company');
     }
-    return this.toEntity(row);
+    return row;
   }
 
   public async findAll(): Promise<Company[]> {
     const result = await this.database.query<CompanyRow>(
-      'SELECT id, name, description, location, owner_id, created_at, updated_at FROM companies ORDER BY created_at DESC',
+      `SELECT ${SELECT_COLUMNS} FROM companies ORDER BY created_at DESC`,
     );
-    return result.rows.map((row) => this.toEntity(row));
+    return result.rows;
   }
 
   public async findById(id: string): Promise<Company> {
+    if (!isValidUuid(id)) {
+      throw new NotFoundError('Company tidak ditemukan');
+    }
+
     const result = await this.database.query<CompanyRow>(
-      'SELECT id, name, description, location, owner_id, created_at, updated_at FROM companies WHERE id = $1',
+      `SELECT ${SELECT_COLUMNS} FROM companies WHERE id = $1`,
       [id],
     );
 
@@ -49,7 +56,7 @@ export class CompanyRepository {
     if (row === undefined) {
       throw new NotFoundError('Company tidak ditemukan');
     }
-    return this.toEntity(row);
+    return row;
   }
 
   public async update(id: string, payload: UpdateCompanyPayload): Promise<Company> {
@@ -59,7 +66,7 @@ export class CompanyRepository {
       `UPDATE companies
        SET name = $1, description = $2, location = $3, updated_at = now()
        WHERE id = $4
-       RETURNING id, name, description, location, owner_id, created_at, updated_at`,
+       RETURNING ${SELECT_COLUMNS}`,
       [
         payload.name ?? existing.name,
         payload.description ?? existing.description,
@@ -72,25 +79,17 @@ export class CompanyRepository {
     if (row === undefined) {
       throw new NotFoundError('Company tidak ditemukan');
     }
-    return this.toEntity(row);
+    return row;
   }
 
   public async delete(id: string): Promise<void> {
+    if (!isValidUuid(id)) {
+      throw new NotFoundError('Company tidak ditemukan');
+    }
+
     const result = await this.database.query('DELETE FROM companies WHERE id = $1', [id]);
     if (result.rowCount === 0) {
       throw new NotFoundError('Company tidak ditemukan');
     }
-  }
-
-  private toEntity(row: CompanyRow): Company {
-    return {
-      id: row.id,
-      name: row.name,
-      description: row.description,
-      location: row.location,
-      ownerId: row.owner_id,
-      createdAt: row.created_at,
-      updatedAt: row.updated_at,
-    };
   }
 }

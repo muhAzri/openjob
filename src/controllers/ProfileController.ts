@@ -10,7 +10,7 @@ export class ProfileController {
     const user = await this.profileService.getProfile(userId);
     res.status(200).json({
       status: 'success',
-      data: { user },
+      data: user,
     });
   };
 

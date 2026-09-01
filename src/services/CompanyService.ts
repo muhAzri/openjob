@@ -30,7 +30,7 @@ export class CompanyService {
 
   private async verifyOwnership(companyId: string, ownerId: string): Promise<void> {
     const company = await this.companyRepository.findById(companyId);
-    if (company.ownerId !== ownerId) {
+    if (company.owner_id !== ownerId) {
       throw new AuthorizationError('Anda tidak berhak mengubah resource ini');
     }
   }

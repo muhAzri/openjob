@@ -20,19 +20,11 @@ export class JobRoutes implements Routes {
       this.controller.getJobs,
     );
 
-    router.get(
-      '/company/:companyId',
-      ValidationMiddleware.validateUuidParam('companyId'),
-      this.controller.getJobsByCompany,
-    );
+    router.get('/company/:companyId', this.controller.getJobsByCompany);
 
-    router.get(
-      '/category/:categoryId',
-      ValidationMiddleware.validateUuidParam('categoryId'),
-      this.controller.getJobsByCategory,
-    );
+    router.get('/category/:categoryId', this.controller.getJobsByCategory);
 
-    router.get('/:id', ValidationMiddleware.validateUuidParam('id'), this.controller.getJobById);
+    router.get('/:id', this.controller.getJobById);
 
     router.post(
       '/',
@@ -44,7 +36,6 @@ export class JobRoutes implements Routes {
     router.put(
       '/:id',
       this.authMiddleware.authenticate,
-      ValidationMiddleware.validateUuidParam('id'),
       ValidationMiddleware.validateBody(JobValidator.validateUpdatePayload),
       this.controller.putJob,
     );
@@ -52,7 +43,6 @@ export class JobRoutes implements Routes {
     router.delete(
       '/:id',
       this.authMiddleware.authenticate,
-      ValidationMiddleware.validateUuidParam('id'),
       this.controller.deleteJob,
     );
 

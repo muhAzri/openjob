@@ -16,11 +16,7 @@ export class UserRoutes implements Routes {
       this.controller.postUser,
     );
 
-    router.get(
-      '/:id',
-      ValidationMiddleware.validateUuidParam('id'),
-      this.controller.getUserById,
-    );
+    router.get('/:id', this.controller.getUserById);
 
     return router;
   }

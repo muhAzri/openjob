@@ -13,8 +13,8 @@ export class JobService {
   ) {}
 
   public async create(postedBy: string, payload: CreateJobPayload): Promise<Job> {
-    await this.companyRepository.findById(payload.companyId);
-    await this.categoryRepository.findById(payload.categoryId);
+    await this.companyRepository.findById(payload.company_id);
+    await this.categoryRepository.findById(payload.category_id);
     return this.jobRepository.create(postedBy, payload);
   }
 
@@ -27,22 +27,20 @@ export class JobService {
   }
 
   public async getByCompanyId(companyId: string): Promise<JobDetail[]> {
-    await this.companyRepository.findById(companyId);
     return this.jobRepository.findByCompanyId(companyId);
   }
 
   public async getByCategoryId(categoryId: string): Promise<JobDetail[]> {
-    await this.categoryRepository.findById(categoryId);
     return this.jobRepository.findByCategoryId(categoryId);
   }
 
   public async update(id: string, requesterId: string, payload: UpdateJobPayload): Promise<Job> {
     await this.verifyOwnership(id, requesterId);
-    if (payload.companyId !== undefined) {
-      await this.companyRepository.findById(payload.companyId);
+    if (payload.company_id !== undefined) {
+      await this.companyRepository.findById(payload.company_id);
     }
-    if (payload.categoryId !== undefined) {
-      await this.categoryRepository.findById(payload.categoryId);
+    if (payload.category_id !== undefined) {
+      await this.categoryRepository.findById(payload.category_id);
     }
     return this.jobRepository.update(id, payload);
   }
@@ -54,7 +52,7 @@ export class JobService {
 
   private async verifyOwnership(jobId: string, requesterId: string): Promise<void> {
     const job = await this.jobRepository.findById(jobId);
-    if (job.postedBy !== requesterId) {
+    if (job.posted_by !== requesterId) {
       throw new AuthorizationError('Anda tidak berhak mengubah resource ini');
     }
   }

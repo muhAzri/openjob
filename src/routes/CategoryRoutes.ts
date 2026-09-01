@@ -15,7 +15,7 @@ export class CategoryRoutes implements Routes {
     const router = Router();
 
     router.get('/', this.controller.getCategories);
-    router.get('/:id', ValidationMiddleware.validateUuidParam('id'), this.controller.getCategoryById);
+    router.get('/:id', this.controller.getCategoryById);
 
     router.post(
       '/',
@@ -27,7 +27,6 @@ export class CategoryRoutes implements Routes {
     router.put(
       '/:id',
       this.authMiddleware.authenticate,
-      ValidationMiddleware.validateUuidParam('id'),
       ValidationMiddleware.validateBody(CategoryValidator.validateUpdatePayload),
       this.controller.putCategory,
     );
@@ -35,7 +34,6 @@ export class CategoryRoutes implements Routes {
     router.delete(
       '/:id',
       this.authMiddleware.authenticate,
-      ValidationMiddleware.validateUuidParam('id'),
       this.controller.deleteCategory,
     );
 

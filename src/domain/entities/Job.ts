@@ -1,21 +1,25 @@
-export type EmploymentType = 'full-time' | 'part-time' | 'contract' | 'internship';
+export type JobType = 'full-time' | 'part-time' | 'contract' | 'internship';
 
 export interface Job {
   readonly id: string;
   readonly title: string;
   readonly description: string | null;
-  readonly companyId: string;
-  readonly categoryId: string;
-  readonly postedBy: string;
-  readonly location: string | null;
-  readonly employmentType: EmploymentType;
-  readonly salaryMin: number | null;
-  readonly salaryMax: number | null;
-  readonly createdAt: Date;
-  readonly updatedAt: Date;
+  readonly company_id: string;
+  readonly category_id: string;
+  readonly posted_by: string;
+  readonly job_type: JobType;
+  readonly experience_level: string | null;
+  readonly location_type: string | null;
+  readonly location_city: string | null;
+  readonly salary_min: number | null;
+  readonly salary_max: number | null;
+  readonly is_salary_visible: boolean;
+  readonly status: string;
+  readonly created_at: Date;
+  readonly updated_at: Date;
 }
 
 export interface JobDetail extends Job {
-  readonly companyName: string;
-  readonly categoryName: string;
+  readonly company_name: string;
+  readonly category_name: string;
 }

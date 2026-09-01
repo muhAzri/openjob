@@ -17,7 +17,12 @@ export class UserService {
     }
 
     const hashedPassword = await this.passwordHasher.hash(payload.password);
-    const user = await this.userRepository.create(payload.fullname, payload.email, hashedPassword);
+    const user = await this.userRepository.create(
+      payload.name,
+      payload.email,
+      hashedPassword,
+      payload.role ?? 'user',
+    );
     return toSafeUser(user);
   }
 

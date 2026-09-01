@@ -1,7 +1,10 @@
+import type { UserRole } from '../entities/User';
+
 export interface RegisterUserPayload {
-  readonly fullname: string;
+  readonly name: string;
   readonly email: string;
   readonly password: string;
+  readonly role?: UserRole;
 }
 
 export interface LoginPayload {

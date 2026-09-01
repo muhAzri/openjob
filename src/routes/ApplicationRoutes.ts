@@ -23,32 +23,19 @@ export class ApplicationRoutes implements Routes {
 
     router.get('/', this.controller.getApplications);
 
-    router.get(
-      '/user/:userId',
-      ValidationMiddleware.validateUuidParam('userId'),
-      this.controller.getApplicationsByUser,
-    );
+    router.get('/user/:userId', this.controller.getApplicationsByUser);
 
-    router.get(
-      '/job/:jobId',
-      ValidationMiddleware.validateUuidParam('jobId'),
-      this.controller.getApplicationsByJob,
-    );
+    router.get('/job/:jobId', this.controller.getApplicationsByJob);
 
-    router.get('/:id', ValidationMiddleware.validateUuidParam('id'), this.controller.getApplicationById);
+    router.get('/:id', this.controller.getApplicationById);
 
     router.put(
       '/:id',
-      ValidationMiddleware.validateUuidParam('id'),
       ValidationMiddleware.validateBody(ApplicationValidator.validateUpdatePayload),
       this.controller.putApplication,
     );
 
-    router.delete(
-      '/:id',
-      ValidationMiddleware.validateUuidParam('id'),
-      this.controller.deleteApplication,
-    );
+    router.delete('/:id', this.controller.deleteApplication);
 
     return router;
   }

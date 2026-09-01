@@ -15,7 +15,7 @@ export class CompanyRoutes implements Routes {
     const router = Router();
 
     router.get('/', this.controller.getCompanies);
-    router.get('/:id', ValidationMiddleware.validateUuidParam('id'), this.controller.getCompanyById);
+    router.get('/:id', this.controller.getCompanyById);
 
     router.post(
       '/',
@@ -27,7 +27,6 @@ export class CompanyRoutes implements Routes {
     router.put(
       '/:id',
       this.authMiddleware.authenticate,
-      ValidationMiddleware.validateUuidParam('id'),
       ValidationMiddleware.validateBody(CompanyValidator.validateUpdatePayload),
       this.controller.putCompany,
     );
@@ -35,7 +34,6 @@ export class CompanyRoutes implements Routes {
     router.delete(
       '/:id',
       this.authMiddleware.authenticate,
-      ValidationMiddleware.validateUuidParam('id'),
       this.controller.deleteCompany,
     );
 

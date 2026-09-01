@@ -11,7 +11,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
       primaryKey: true,
       default: pgm.func('gen_random_uuid()'),
     },
-    fullname: {
+    name: {
       type: 'varchar(100)',
       notNull: true,
     },
@@ -23,6 +23,11 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
     password: {
       type: 'text',
       notNull: true,
+    },
+    role: {
+      type: 'varchar(20)',
+      notNull: true,
+      default: 'user',
     },
     created_at: {
       type: 'timestamptz',

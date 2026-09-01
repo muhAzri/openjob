@@ -11,7 +11,7 @@ export class CompanyController {
     res.status(201).json({
       status: 'success',
       message: 'Company berhasil ditambahkan',
-      data: { company },
+      data: company,
     });
   };
 
@@ -28,7 +28,7 @@ export class CompanyController {
     const company = await this.companyService.getById(id);
     res.status(200).json({
       status: 'success',
-      data: { company },
+      data: company,
     });
   };
 
@@ -39,7 +39,7 @@ export class CompanyController {
     res.status(200).json({
       status: 'success',
       message: 'Company berhasil diperbarui',
-      data: { company },
+      data: company,
     });
   };
 

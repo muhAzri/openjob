@@ -1,6 +1,6 @@
 export interface Bookmark {
   readonly id: string;
-  readonly jobId: string;
-  readonly userId: string;
-  readonly createdAt: Date;
+  readonly job_id: string;
+  readonly user_id: string;
+  readonly created_at: Date;
 }

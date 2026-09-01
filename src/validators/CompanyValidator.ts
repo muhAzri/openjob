@@ -4,14 +4,14 @@ import type { CreateCompanyPayload, UpdateCompanyPayload } from '../domain/dto/C
 
 const createSchema = Joi.object<CreateCompanyPayload>({
   name: Joi.string().min(2).max(150).required(),
+  location: Joi.string().min(1).max(150).required(),
   description: Joi.string().allow('').max(2000).optional(),
-  location: Joi.string().allow('').max(150).optional(),
 });
 
 const updateSchema = Joi.object<UpdateCompanyPayload>({
   name: Joi.string().min(2).max(150).optional(),
+  location: Joi.string().min(1).max(150).optional(),
   description: Joi.string().allow('').max(2000).optional(),
-  location: Joi.string().allow('').max(150).optional(),
 });
 
 export class CompanyValidator extends BaseValidator {

@@ -9,7 +9,7 @@ export class UserController {
     res.status(201).json({
       status: 'success',
       message: 'User berhasil ditambahkan',
-      data: { user },
+      data: user,
     });
   };
 
@@ -18,7 +18,7 @@ export class UserController {
     const user = await this.userService.getById(id);
     res.status(200).json({
       status: 'success',
-      data: { user },
+      data: user,
     });
   };
 }

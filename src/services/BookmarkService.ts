@@ -23,10 +23,10 @@ export class BookmarkService {
   public async getDetail(userId: string, jobId: string, bookmarkId: string): Promise<Bookmark> {
     const bookmark = await this.bookmarkRepository.findById(bookmarkId);
 
-    if (bookmark.jobId !== jobId) {
+    if (bookmark.job_id !== jobId) {
       throw new NotFoundError('Bookmark tidak ditemukan');
     }
-    if (bookmark.userId !== userId) {
+    if (bookmark.user_id !== userId) {
       throw new AuthorizationError('Anda tidak berhak melihat bookmark ini');
     }
 

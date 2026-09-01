@@ -5,8 +5,10 @@ import type { CreateApplicationPayload, UpdateApplicationPayload } from '../doma
 const APPLICATION_STATUSES = ['pending', 'reviewed', 'accepted', 'rejected'] as const;
 
 const createSchema = Joi.object<CreateApplicationPayload>({
-  jobId: Joi.string().guid({ version: 'uuidv4' }).required(),
-  coverLetter: Joi.string().allow('').max(5000).optional(),
+  user_id: Joi.string().guid({ version: 'uuidv4' }).required(),
+  job_id: Joi.string().guid({ version: 'uuidv4' }).required(),
+  cover_letter: Joi.string().allow('').max(5000).optional(),
+  status: Joi.string().valid(...APPLICATION_STATUSES).optional(),
 });
 
 const updateSchema = Joi.object<UpdateApplicationPayload>({

@@ -9,7 +9,7 @@ export class CategoryController {
     res.status(201).json({
       status: 'success',
       message: 'Category berhasil ditambahkan',
-      data: { category },
+      data: category,
     });
   };
 
@@ -26,7 +26,7 @@ export class CategoryController {
     const category = await this.categoryService.getById(id);
     res.status(200).json({
       status: 'success',
-      data: { category },
+      data: category,
     });
   };
 
@@ -36,7 +36,7 @@ export class CategoryController {
     res.status(200).json({
       status: 'success',
       message: 'Category berhasil diperbarui',
-      data: { category },
+      data: category,
     });
   };
 

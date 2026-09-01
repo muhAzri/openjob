@@ -11,9 +11,9 @@ export class ApplicationService {
   ) {}
 
   public async apply(userId: string, payload: CreateApplicationPayload): Promise<Application> {
-    await this.jobRepository.findById(payload.jobId);
+    await this.jobRepository.findById(payload.job_id);
 
-    const hasApplied = await this.applicationRepository.hasAppliedToJob(userId, payload.jobId);
+    const hasApplied = await this.applicationRepository.hasAppliedToJob(userId, payload.job_id);
     if (hasApplied) {
       throw new InvariantError('Anda sudah melamar pada job ini');
     }
@@ -34,7 +34,6 @@ export class ApplicationService {
   }
 
   public async getByJobId(jobId: string): Promise<Application[]> {
-    await this.jobRepository.findById(jobId);
     return this.applicationRepository.findByJobId(jobId);
   }
 
@@ -44,9 +43,9 @@ export class ApplicationService {
     payload: UpdateApplicationPayload,
   ): Promise<Application> {
     const application = await this.applicationRepository.findById(id);
-    const job = await this.jobRepository.findById(application.jobId);
+    const job = await this.jobRepository.findById(application.job_id);
 
-    if (job.postedBy !== requesterId) {
+    if (job.posted_by !== requesterId) {
       throw new AuthorizationError('Hanya pemilik job yang dapat mengubah status lamaran');
     }
 
@@ -56,13 +55,13 @@ export class ApplicationService {
   public async delete(id: string, requesterId: string): Promise<void> {
     const application = await this.applicationRepository.findById(id);
 
-    if (application.userId === requesterId) {
+    if (application.user_id === requesterId) {
       await this.applicationRepository.delete(id);
       return;
     }
 
-    const job = await this.jobRepository.findById(application.jobId);
-    if (job.postedBy !== requesterId) {
+    const job = await this.jobRepository.findById(application.job_id);
+    if (job.posted_by !== requesterId) {
       throw new AuthorizationError('Anda tidak berhak menghapus lamaran ini');
     }
 

@@ -1,0 +1,46 @@
+{
+  "name": "openjob",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "start:dev": "tsx watch src/server.ts",
+    "migrate": "node-pg-migrate -j ts",
+    "migrate:up": "node-pg-migrate -j ts up",
+    "migrate:down": "node-pg-migrate -j ts down",
+    "migrate:create": "node-pg-migrate -j ts create",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "joi": "^18.2.5",
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.23.0"
+  },
+  "allowScripts": {
+    "bcrypt@6.0.0": true,
+    "fsevents@2.3.3": true,
+    "esbuild@0.28.2": true
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^26.4.0",
+    "@types/pg": "^8.23.1",
+    "node-pg-migrate": "^9.0.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.23.13",
+    "typescript": "^7.0.2"
+  }
+}

@@ -3,7 +3,10 @@ import path from 'node:path';
 import type { ApplicationRepository } from '../repositories/ApplicationRepository';
 import type { JobRepository } from '../repositories/JobRepository';
 import type { Application } from '../domain/entities/Application';
-import type { CreateApplicationPayload, UpdateApplicationPayload } from '../domain/dto/ApplicationDto';
+import type {
+  CreateApplicationPayload,
+  UpdateApplicationPayload,
+} from '../domain/dto/ApplicationDto';
 import { AuthorizationError, InvariantError } from '../errors';
 import { RESUME_UPLOAD_DIR } from '../middlewares/UploadMiddleware';
 import { CacheService } from './CacheService';
@@ -36,19 +39,19 @@ export class ApplicationService {
   }
 
   public async getAll(): Promise<Application[]> {
-    return this.applicationRepository.findAll();
+    return await this.applicationRepository.findAll();
   }
 
   public async getById(id: string): Promise<Application> {
-    return this.applicationRepository.findById(id);
+    return await this.applicationRepository.findById(id);
   }
 
   public async getByUserId(userId: string): Promise<Application[]> {
-    return this.applicationRepository.findByUserId(userId);
+    return await this.applicationRepository.findByUserId(userId);
   }
 
   public async getByJobId(jobId: string): Promise<Application[]> {
-    return this.applicationRepository.findByJobId(jobId);
+    return await this.applicationRepository.findByJobId(jobId);
   }
 
   public async updateStatus(
@@ -114,7 +117,7 @@ export class ApplicationService {
       fs.rm(oldFilePath, { force: true }, () => undefined);
     }
 
-    return this.applicationRepository.attachResume(id, resumeFilename, resumeOriginalName);
+    return await this.applicationRepository.attachResume(id, resumeFilename, resumeOriginalName);
   }
 
   public async getResumeOwner(id: string, requesterId: string): Promise<Application> {

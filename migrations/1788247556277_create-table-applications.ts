@@ -41,7 +41,11 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
     },
   });
 
-  pgm.addConstraint('applications', 'unique_application_job_id_and_user_id', 'UNIQUE(job_id, user_id)');
+  pgm.addConstraint(
+    'applications',
+    'unique_application_job_id_and_user_id',
+    'UNIQUE(job_id, user_id)',
+  );
   pgm.createIndex('applications', 'user_id');
   pgm.createIndex('applications', 'job_id');
 }

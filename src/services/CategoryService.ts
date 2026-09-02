@@ -6,19 +6,19 @@ export class CategoryService {
   constructor(private readonly categoryRepository: CategoryRepository) {}
 
   public async create(payload: CreateCategoryPayload): Promise<Category> {
-    return this.categoryRepository.create(payload);
+    return await this.categoryRepository.create(payload);
   }
 
   public async getAll(): Promise<Category[]> {
-    return this.categoryRepository.findAll();
+    return await this.categoryRepository.findAll();
   }
 
   public async getById(id: string): Promise<Category> {
-    return this.categoryRepository.findById(id);
+    return await this.categoryRepository.findById(id);
   }
 
   public async update(id: string, payload: UpdateCategoryPayload): Promise<Category> {
-    return this.categoryRepository.update(id, payload);
+    return await this.categoryRepository.update(id, payload);
   }
 
   public async delete(id: string): Promise<void> {

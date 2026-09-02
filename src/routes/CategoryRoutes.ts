@@ -31,11 +31,7 @@ export class CategoryRoutes implements Routes {
       this.controller.putCategory,
     );
 
-    router.delete(
-      '/:id',
-      this.authMiddleware.authenticate,
-      this.controller.deleteCategory,
-    );
+    router.delete('/:id', this.authMiddleware.authenticate, this.controller.deleteCategory);
 
     return router;
   }

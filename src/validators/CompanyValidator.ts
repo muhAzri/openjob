@@ -15,11 +15,11 @@ const updateSchema = Joi.object<UpdateCompanyPayload>({
 });
 
 export class CompanyValidator extends BaseValidator {
-  public static validateCreatePayload(payload: unknown): CreateCompanyPayload {
+  public static validateCreatePayload = (payload: unknown): CreateCompanyPayload => {
     return BaseValidator.runValidation(createSchema, payload);
-  }
+  };
 
-  public static validateUpdatePayload(payload: unknown): UpdateCompanyPayload {
+  public static validateUpdatePayload = (payload: unknown): UpdateCompanyPayload => {
     return BaseValidator.runValidation(updateSchema, payload);
-  }
+  };
 }

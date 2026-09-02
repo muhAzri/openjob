@@ -12,17 +12,15 @@ export class Database {
   }
 
   public static getInstance(): Database {
-    if (Database.instance === undefined) {
-      Database.instance = new Database();
-    }
+    Database.instance ??= new Database();
     return Database.instance;
   }
 
   public async query<T extends QueryResultRow>(
     text: string,
-    params?: ReadonlyArray<unknown>,
+    params?: readonly unknown[],
   ): Promise<QueryResult<T>> {
-    return this.pool.query<T>(text, params as unknown[]);
+    return await this.pool.query<T>(text, params as unknown[]);
   }
 
   public async close(): Promise<void> {

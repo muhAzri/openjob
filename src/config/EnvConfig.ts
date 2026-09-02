@@ -41,7 +41,8 @@ class EnvConfig {
 
     this.redisHost = this.readRequired('REDIS_HOST');
     this.redisPort = Number(process.env['REDIS_PORT'] ?? 6379);
-    this.redisPassword = process.env['REDIS_PASSWORD'] === '' ? undefined : process.env['REDIS_PASSWORD'];
+    this.redisPassword =
+      process.env['REDIS_PASSWORD'] === '' ? undefined : process.env['REDIS_PASSWORD'];
     this.cacheTtlSeconds = Number(process.env['CACHE_TTL_SECONDS'] ?? 3600);
 
     this.rabbitmqHost = this.readRequired('RABBITMQ_HOST');

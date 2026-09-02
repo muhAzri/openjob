@@ -90,7 +90,11 @@ export class App {
     const jobService = new JobService(jobRepository, companyRepository, categoryRepository);
     const applicationService = new ApplicationService(applicationRepository, jobRepository);
     const bookmarkService = new BookmarkService(bookmarkRepository, jobRepository);
-    const profileService = new ProfileService(userRepository, applicationRepository, bookmarkRepository);
+    const profileService = new ProfileService(
+      userRepository,
+      applicationRepository,
+      bookmarkRepository,
+    );
 
     const authMiddleware = new AuthMiddleware(tokenManager);
 
@@ -104,11 +108,20 @@ export class App {
     const profileController = new ProfileController(profileService);
 
     this.express.use('/users', new UserRoutes(userController, authMiddleware).register());
-    this.express.use('/authentications', new AuthenticationRoutes(authenticationController, authMiddleware).register());
+    this.express.use(
+      '/authentications',
+      new AuthenticationRoutes(authenticationController, authMiddleware).register(),
+    );
     this.express.use('/companies', new CompanyRoutes(companyController, authMiddleware).register());
-    this.express.use('/categories', new CategoryRoutes(categoryController, authMiddleware).register());
+    this.express.use(
+      '/categories',
+      new CategoryRoutes(categoryController, authMiddleware).register(),
+    );
     this.express.use('/jobs', new JobRoutes(jobController, authMiddleware).register());
-    this.express.use('/applications', new ApplicationRoutes(applicationController, authMiddleware).register());
+    this.express.use(
+      '/applications',
+      new ApplicationRoutes(applicationController, authMiddleware).register(),
+    );
     this.express.use('/', new BookmarkRoutes(bookmarkController, authMiddleware).register());
     this.express.use('/profile', new ProfileRoutes(profileController, authMiddleware).register());
   }

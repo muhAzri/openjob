@@ -30,7 +30,9 @@ export class ApplicationConsumer {
         return;
       }
       this.handleMessage(message)
-        .then(() => channel.ack(message))
+        .then(() => {
+          channel.ack(message);
+        })
         .catch((error: unknown) => {
           // eslint-disable-next-line no-console
           console.error('Gagal memproses pesan lamaran:', error);

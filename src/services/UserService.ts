@@ -35,7 +35,10 @@ export class UserService {
 
   public async update(id: string, payload: UpdateUserPayload): Promise<SafeUser> {
     if (payload.email !== undefined) {
-      const isEmailAvailable = await this.userRepository.isEmailAvailableForUpdate(payload.email, id);
+      const isEmailAvailable = await this.userRepository.isEmailAvailableForUpdate(
+        payload.email,
+        id,
+      );
       if (!isEmailAvailable) {
         throw new InvariantError('Gagal memperbarui user. Email sudah digunakan');
       }

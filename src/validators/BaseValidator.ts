@@ -3,11 +3,11 @@ import { InvariantError } from '../errors';
 
 export abstract class BaseValidator {
   protected static runValidation<T>(schema: ObjectSchema<T>, payload: unknown): T {
-    const { error, value } = schema.validate(payload, { abortEarly: false });
-    if (error) {
-      const message = error.details.map((detail) => detail.message).join(', ');
+    const result = schema.validate(payload, { abortEarly: false });
+    if (result.error) {
+      const message = result.error.details.map((detail) => detail.message).join(', ');
       throw new InvariantError(message);
     }
-    return value;
+    return result.value;
   }
 }

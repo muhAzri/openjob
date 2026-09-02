@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import type { CompanyService } from '../services/CompanyService';
+import type { CreateCompanyPayload, UpdateCompanyPayload } from '../domain/dto/CompanyDto';
 import { requireUserId } from './RequestUser';
 
 export class CompanyController {
@@ -7,7 +8,7 @@ export class CompanyController {
 
   public postCompany = async (req: Request, res: Response): Promise<void> => {
     const ownerId = requireUserId(req);
-    const company = await this.companyService.create(ownerId, req.body);
+    const company = await this.companyService.create(ownerId, req.body as CreateCompanyPayload);
     res.status(201).json({
       status: 'success',
       message: 'Company berhasil ditambahkan',
@@ -35,7 +36,7 @@ export class CompanyController {
   public putCompany = async (req: Request, res: Response): Promise<void> => {
     const id = req.params['id'] as string;
     const ownerId = requireUserId(req);
-    const company = await this.companyService.update(id, ownerId, req.body);
+    const company = await this.companyService.update(id, ownerId, req.body as UpdateCompanyPayload);
     res.status(200).json({
       status: 'success',
       message: 'Company berhasil diperbarui',

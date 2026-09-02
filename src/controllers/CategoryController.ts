@@ -1,11 +1,12 @@
 import type { Request, Response } from 'express';
 import type { CategoryService } from '../services/CategoryService';
+import type { CreateCategoryPayload, UpdateCategoryPayload } from '../domain/dto/CategoryDto';
 
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   public postCategory = async (req: Request, res: Response): Promise<void> => {
-    const category = await this.categoryService.create(req.body);
+    const category = await this.categoryService.create(req.body as CreateCategoryPayload);
     res.status(201).json({
       status: 'success',
       message: 'Category berhasil ditambahkan',
@@ -32,7 +33,7 @@ export class CategoryController {
 
   public putCategory = async (req: Request, res: Response): Promise<void> => {
     const id = req.params['id'] as string;
-    const category = await this.categoryService.update(id, req.body);
+    const category = await this.categoryService.update(id, req.body as UpdateCategoryPayload);
     res.status(200).json({
       status: 'success',
       message: 'Category berhasil diperbarui',

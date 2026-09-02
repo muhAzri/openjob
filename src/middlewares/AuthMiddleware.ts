@@ -16,7 +16,7 @@ export class AuthMiddleware {
   };
 
   private extractBearerToken(authorizationHeader: string | undefined): string {
-    if (authorizationHeader === undefined || !authorizationHeader.startsWith('Bearer ')) {
+    if (!authorizationHeader?.startsWith('Bearer ')) {
       throw new AuthenticationError('Missing or invalid Authorization header');
     }
     return authorizationHeader.substring('Bearer '.length);

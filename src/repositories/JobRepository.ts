@@ -104,10 +104,9 @@ export class JobRepository {
       throw new NotFoundError('Job tidak ditemukan');
     }
 
-    const result = await this.database.query<JobDetailRow>(
-      `${DETAIL_SELECT} WHERE jobs.id = $1`,
-      [id],
-    );
+    const result = await this.database.query<JobDetailRow>(`${DETAIL_SELECT} WHERE jobs.id = $1`, [
+      id,
+    ]);
 
     const row = result.rows[0];
     if (row === undefined) {

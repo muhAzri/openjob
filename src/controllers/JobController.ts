@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import type { JobService } from '../services/JobService';
-import type { JobQueryParams } from '../domain/dto/JobDto';
+import type { CreateJobPayload, JobQueryParams, UpdateJobPayload } from '../domain/dto/JobDto';
 import { requireUserId } from './RequestUser';
 
 export class JobController {
@@ -8,7 +8,7 @@ export class JobController {
 
   public postJob = async (req: Request, res: Response): Promise<void> => {
     const postedBy = requireUserId(req);
-    const job = await this.jobService.create(postedBy, req.body);
+    const job = await this.jobService.create(postedBy, req.body as CreateJobPayload);
     res.status(201).json({
       status: 'success',
       message: 'Job berhasil ditambahkan',
@@ -55,7 +55,7 @@ export class JobController {
   public putJob = async (req: Request, res: Response): Promise<void> => {
     const id = req.params['id'] as string;
     const requesterId = requireUserId(req);
-    const job = await this.jobService.update(id, requesterId, req.body);
+    const job = await this.jobService.update(id, requesterId, req.body as UpdateJobPayload);
     res.status(200).json({
       status: 'success',
       message: 'Job berhasil diperbarui',

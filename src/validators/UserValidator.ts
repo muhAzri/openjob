@@ -15,11 +15,11 @@ const updateSchema = Joi.object<UpdateUserPayload>({
 }).min(1);
 
 export class UserValidator extends BaseValidator {
-  public static validateRegisterPayload(payload: unknown): RegisterUserPayload {
+  public static validateRegisterPayload = (payload: unknown): RegisterUserPayload => {
     return BaseValidator.runValidation(registerSchema, payload);
-  }
+  };
 
-  public static validateUpdatePayload(payload: unknown): UpdateUserPayload {
+  public static validateUpdatePayload = (payload: unknown): UpdateUserPayload => {
     return BaseValidator.runValidation(updateSchema, payload);
-  }
+  };
 }

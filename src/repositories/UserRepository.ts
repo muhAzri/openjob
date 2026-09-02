@@ -20,7 +20,12 @@ const SELECT_COLUMNS = 'id, name, email, password, role, created_at, updated_at'
 export class UserRepository {
   constructor(private readonly database: Database) {}
 
-  public async create(name: string, email: string, hashedPassword: string, role: UserRole): Promise<User> {
+  public async create(
+    name: string,
+    email: string,
+    hashedPassword: string,
+    role: UserRole,
+  ): Promise<User> {
     const result = await this.database.query<UserRow>(
       `INSERT INTO users (name, email, password, role)
        VALUES ($1, $2, $3, $4)

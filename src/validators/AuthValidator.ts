@@ -12,11 +12,11 @@ const refreshTokenSchema = Joi.object<RefreshTokenPayload>({
 });
 
 export class AuthValidator extends BaseValidator {
-  public static validateLoginPayload(payload: unknown): LoginPayload {
+  public static validateLoginPayload = (payload: unknown): LoginPayload => {
     return BaseValidator.runValidation(loginSchema, payload);
-  }
+  };
 
-  public static validateRefreshTokenPayload(payload: unknown): RefreshTokenPayload {
+  public static validateRefreshTokenPayload = (payload: unknown): RefreshTokenPayload => {
     return BaseValidator.runValidation(refreshTokenSchema, payload);
-  }
+  };
 }

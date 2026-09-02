@@ -18,10 +18,10 @@ export class ProfileService {
   }
 
   public async getApplications(userId: string): Promise<Application[]> {
-    return this.applicationRepository.findByUserId(userId);
+    return await this.applicationRepository.findByUserId(userId);
   }
 
   public async getBookmarks(userId: string): Promise<Bookmark[]> {
-    return this.bookmarkRepository.findByUserId(userId);
+    return await this.bookmarkRepository.findByUserId(userId);
   }
 }

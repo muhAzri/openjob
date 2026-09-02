@@ -37,11 +37,7 @@ export class CompanyRoutes implements Routes {
       this.controller.putCompany,
     );
 
-    router.delete(
-      '/:id',
-      this.authMiddleware.authenticate,
-      this.controller.deleteCompany,
-    );
+    router.delete('/:id', this.authMiddleware.authenticate, this.controller.deleteCompany);
 
     return router;
   }

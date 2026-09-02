@@ -1,6 +1,10 @@
 import path from 'node:path';
 import type { Request, Response } from 'express';
 import type { ApplicationService } from '../services/ApplicationService';
+import type {
+  CreateApplicationPayload,
+  UpdateApplicationPayload,
+} from '../domain/dto/ApplicationDto';
 import { requireUserId } from './RequestUser';
 import { RESUME_UPLOAD_DIR } from '../middlewares/UploadMiddleware';
 import { InvariantError } from '../errors';
@@ -10,7 +14,10 @@ export class ApplicationController {
 
   public postApplication = async (req: Request, res: Response): Promise<void> => {
     const userId = requireUserId(req);
-    const application = await this.applicationService.apply(userId, req.body);
+    const application = await this.applicationService.apply(
+      userId,
+      req.body as CreateApplicationPayload,
+    );
     res.status(201).json({
       status: 'success',
       message: 'Lamaran berhasil ditambahkan',
@@ -56,7 +63,11 @@ export class ApplicationController {
   public putApplication = async (req: Request, res: Response): Promise<void> => {
     const id = req.params['id'] as string;
     const requesterId = requireUserId(req);
-    const application = await this.applicationService.updateStatus(id, requesterId, req.body);
+    const application = await this.applicationService.updateStatus(
+      id,
+      requesterId,
+      req.body as UpdateApplicationPayload,
+    );
     res.status(200).json({
       status: 'success',
       message: 'Status lamaran berhasil diperbarui',

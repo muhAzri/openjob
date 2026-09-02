@@ -15,23 +15,23 @@ export class JobService {
   public async create(postedBy: string, payload: CreateJobPayload): Promise<Job> {
     await this.companyRepository.findById(payload.company_id);
     await this.categoryRepository.findById(payload.category_id);
-    return this.jobRepository.create(postedBy, payload);
+    return await this.jobRepository.create(postedBy, payload);
   }
 
   public async getAll(query: JobQueryParams): Promise<JobDetail[]> {
-    return this.jobRepository.findAll(query);
+    return await this.jobRepository.findAll(query);
   }
 
   public async getById(id: string): Promise<JobDetail> {
-    return this.jobRepository.findById(id);
+    return await this.jobRepository.findById(id);
   }
 
   public async getByCompanyId(companyId: string): Promise<JobDetail[]> {
-    return this.jobRepository.findByCompanyId(companyId);
+    return await this.jobRepository.findByCompanyId(companyId);
   }
 
   public async getByCategoryId(categoryId: string): Promise<JobDetail[]> {
-    return this.jobRepository.findByCategoryId(categoryId);
+    return await this.jobRepository.findByCategoryId(categoryId);
   }
 
   public async update(id: string, requesterId: string, payload: UpdateJobPayload): Promise<Job> {
@@ -42,7 +42,7 @@ export class JobService {
     if (payload.category_id !== undefined) {
       await this.categoryRepository.findById(payload.category_id);
     }
-    return this.jobRepository.update(id, payload);
+    return await this.jobRepository.update(id, payload);
   }
 
   public async delete(id: string, requesterId: string): Promise<void> {

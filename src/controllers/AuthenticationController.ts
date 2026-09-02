@@ -1,12 +1,14 @@
 import type { Request, Response } from 'express';
 import type { AuthenticationService } from '../services/AuthenticationService';
-import type { RefreshTokenPayload } from '../domain/dto/AuthDto';
+import type { LoginPayload, RefreshTokenPayload } from '../domain/dto/AuthDto';
 
 export class AuthenticationController {
   constructor(private readonly authenticationService: AuthenticationService) {}
 
   public postAuthentication = async (req: Request, res: Response): Promise<void> => {
-    const { accessToken, refreshToken } = await this.authenticationService.login(req.body);
+    const { accessToken, refreshToken } = await this.authenticationService.login(
+      req.body as LoginPayload,
+    );
     res.status(200).json({
       status: 'success',
       message: 'Authentication berhasil ditambahkan',

@@ -40,11 +40,7 @@ export class JobRoutes implements Routes {
       this.controller.putJob,
     );
 
-    router.delete(
-      '/:id',
-      this.authMiddleware.authenticate,
-      this.controller.deleteJob,
-    );
+    router.delete('/:id', this.authMiddleware.authenticate, this.controller.deleteJob);
 
     return router;
   }

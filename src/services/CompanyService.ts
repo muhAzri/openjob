@@ -15,14 +15,18 @@ export class CompanyService {
   }
 
   public async getAll(): Promise<Company[]> {
-    return this.companyRepository.findAll();
+    return await this.companyRepository.findAll();
   }
 
   public async getById(id: string): Promise<Company> {
-    return this.companyRepository.findById(id);
+    return await this.companyRepository.findById(id);
   }
 
-  public async update(id: string, ownerId: string, payload: UpdateCompanyPayload): Promise<Company> {
+  public async update(
+    id: string,
+    ownerId: string,
+    payload: UpdateCompanyPayload,
+  ): Promise<Company> {
     await this.verifyOwnership(id, ownerId);
     const company = await this.companyRepository.update(id, payload);
     await CacheService.del(CacheKeys.companyDetail(id));

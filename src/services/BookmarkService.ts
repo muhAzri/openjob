@@ -38,7 +38,7 @@ export class BookmarkService {
   }
 
   public async getAllForUser(userId: string): Promise<Bookmark[]> {
-    return this.bookmarkRepository.findByUserId(userId);
+    return await this.bookmarkRepository.findByUserId(userId);
   }
 
   public async deleteByUserAndJob(userId: string, jobId: string): Promise<void> {

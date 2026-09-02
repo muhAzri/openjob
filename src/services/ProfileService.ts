@@ -1,7 +1,7 @@
 import type { UserRepository } from '../repositories/UserRepository';
 import type { ApplicationRepository } from '../repositories/ApplicationRepository';
 import type { BookmarkRepository } from '../repositories/BookmarkRepository';
-import type { Application } from '../domain/entities/Application';
+import type { ApplicationProfileDetail } from '../domain/entities/Application';
 import type { Bookmark } from '../domain/entities/Bookmark';
 import { toSafeUser, type SafeUser } from '../domain/entities/User';
 
@@ -17,8 +17,8 @@ export class ProfileService {
     return toSafeUser(user);
   }
 
-  public async getApplications(userId: string): Promise<Application[]> {
-    return await this.applicationRepository.findByUserId(userId);
+  public async getApplications(userId: string): Promise<ApplicationProfileDetail[]> {
+    return await this.applicationRepository.findByUserIdProfileDetailed(userId);
   }
 
   public async getBookmarks(userId: string): Promise<Bookmark[]> {

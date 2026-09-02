@@ -16,6 +16,7 @@ export class CacheMiddleware {
             return;
           }
 
+          res.setHeader('X-Data-Source', 'database');
           const originalJson = res.json.bind(res);
           res.json = (body: unknown): Response => {
             if (res.statusCode >= 200 && res.statusCode < 300) {

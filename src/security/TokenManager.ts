@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { randomUUID } from 'node:crypto';
 import type { AccessTokenClaim } from '../domain/dto/AuthDto';
 import { AuthenticationError, InvariantError } from '../errors';
 
@@ -22,7 +23,7 @@ export class TokenManager {
   }
 
   public generateRefreshToken(claim: AccessTokenClaim): string {
-    return jwt.sign(claim, this.refreshTokenKey);
+    return jwt.sign(claim, this.refreshTokenKey, { jwtid: randomUUID() });
   }
 
   public verifyAccessToken(token: string): AccessTokenClaim {

@@ -11,3 +11,15 @@ export interface Application {
   readonly created_at: Date;
   readonly updated_at: Date;
 }
+
+export interface ApplicationDetail extends Application {
+  readonly job_title: string;
+  readonly company_id: string;
+  readonly company_name: string;
+  readonly category_id: string;
+}
+
+export interface ApplicationProfileDetail extends ApplicationDetail {
+  readonly category_name: string;
+  readonly location_city: string | null;
+}

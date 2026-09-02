@@ -1,6 +1,6 @@
 import type { QueryResultRow } from 'pg';
 import type { Database } from '../config/Database';
-import type { Company } from '../domain/entities/Company';
+import type { Company, CompanySummary } from '../domain/entities/Company';
 import type { CreateCompanyPayload, UpdateCompanyPayload } from '../domain/dto/CompanyDto';
 import { InvariantError, NotFoundError } from '../errors';
 import { isValidUuid } from '../utils/Uuid';
@@ -15,7 +15,17 @@ interface CompanyRow extends QueryResultRow {
   updated_at: Date;
 }
 
+interface CompanySummaryRow extends QueryResultRow {
+  id: string;
+  name: string;
+  description: string | null;
+  location: string;
+  owner_id: string;
+  created_at: Date;
+}
+
 const SELECT_COLUMNS = 'id, name, description, location, owner_id, created_at, updated_at';
+const LIST_COLUMNS = 'id, name, description, location, owner_id, created_at';
 
 export class CompanyRepository {
   constructor(private readonly database: Database) {}
@@ -35,9 +45,9 @@ export class CompanyRepository {
     return row;
   }
 
-  public async findAll(): Promise<Company[]> {
-    const result = await this.database.query<CompanyRow>(
-      `SELECT ${SELECT_COLUMNS} FROM companies ORDER BY created_at DESC`,
+  public async findAll(): Promise<CompanySummary[]> {
+    const result = await this.database.query<CompanySummaryRow>(
+      `SELECT ${LIST_COLUMNS} FROM companies ORDER BY created_at DESC`,
     );
     return result.rows;
   }

@@ -1,7 +1,7 @@
 import type { JobRepository } from '../repositories/JobRepository';
 import type { CompanyRepository } from '../repositories/CompanyRepository';
 import type { CategoryRepository } from '../repositories/CategoryRepository';
-import type { Job, JobDetail } from '../domain/entities/Job';
+import type { Job, JobDetail, JobSummary } from '../domain/entities/Job';
 import type { CreateJobPayload, JobQueryParams, UpdateJobPayload } from '../domain/dto/JobDto';
 import { AuthorizationError } from '../errors';
 
@@ -18,7 +18,7 @@ export class JobService {
     return await this.jobRepository.create(postedBy, payload);
   }
 
-  public async getAll(query: JobQueryParams): Promise<JobDetail[]> {
+  public async getAll(query: JobQueryParams): Promise<JobSummary[]> {
     return await this.jobRepository.findAll(query);
   }
 
@@ -26,11 +26,11 @@ export class JobService {
     return await this.jobRepository.findById(id);
   }
 
-  public async getByCompanyId(companyId: string): Promise<JobDetail[]> {
+  public async getByCompanyId(companyId: string): Promise<JobSummary[]> {
     return await this.jobRepository.findByCompanyId(companyId);
   }
 
-  public async getByCategoryId(categoryId: string): Promise<JobDetail[]> {
+  public async getByCategoryId(categoryId: string): Promise<JobSummary[]> {
     return await this.jobRepository.findByCategoryId(categoryId);
   }
 

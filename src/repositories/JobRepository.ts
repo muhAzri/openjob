@@ -1,6 +1,6 @@
 import type { QueryResultRow } from 'pg';
 import type { Database } from '../config/Database';
-import type { Job, JobDetail, JobType } from '../domain/entities/Job';
+import type { Job, JobDetail, JobSummary, JobType } from '../domain/entities/Job';
 import type { CreateJobPayload, JobQueryParams, UpdateJobPayload } from '../domain/dto/JobDto';
 import { InvariantError, NotFoundError } from '../errors';
 import { isValidUuid } from '../utils/Uuid';
@@ -29,12 +29,38 @@ interface JobDetailRow extends JobRow {
   category_name: string;
 }
 
+interface JobSummaryRow extends QueryResultRow {
+  id: string;
+  title: string;
+  company_id: string;
+  company_name: string;
+  category_id: string;
+  category_name: string;
+  job_type: JobType;
+  location_type: string | null;
+  location_city: string | null;
+  salary_min: number | null;
+  salary_max: number | null;
+  is_salary_visible: boolean;
+  status: string;
+}
+
 const JOB_COLUMNS = `jobs.id, jobs.title, jobs.description, jobs.company_id, jobs.category_id,
     jobs.posted_by, jobs.job_type, jobs.experience_level, jobs.location_type, jobs.location_city,
     jobs.salary_min, jobs.salary_max, jobs.is_salary_visible, jobs.status,
     jobs.created_at, jobs.updated_at`;
 
 const DETAIL_SELECT = `SELECT ${JOB_COLUMNS},
+    companies.name AS company_name, categories.name AS category_name
+  FROM jobs
+  JOIN companies ON companies.id = jobs.company_id
+  JOIN categories ON categories.id = jobs.category_id`;
+
+const SUMMARY_COLUMNS = `jobs.id, jobs.title, jobs.company_id, jobs.category_id,
+    jobs.job_type, jobs.location_type, jobs.location_city,
+    jobs.salary_min, jobs.salary_max, jobs.is_salary_visible, jobs.status`;
+
+const SUMMARY_SELECT = `SELECT ${SUMMARY_COLUMNS},
     companies.name AS company_name, categories.name AS category_name
   FROM jobs
   JOIN companies ON companies.id = jobs.company_id
@@ -78,7 +104,7 @@ export class JobRepository {
     return row;
   }
 
-  public async findAll(query: JobQueryParams): Promise<JobDetail[]> {
+  public async findAll(query: JobQueryParams): Promise<JobSummary[]> {
     const conditions: string[] = [];
     const values: unknown[] = [];
 
@@ -92,8 +118,8 @@ export class JobRepository {
     }
 
     const whereClause = conditions.length > 0 ? ` WHERE ${conditions.join(' AND ')}` : '';
-    const result = await this.database.query<JobDetailRow>(
-      `${DETAIL_SELECT}${whereClause} ORDER BY jobs.created_at DESC`,
+    const result = await this.database.query<JobSummaryRow>(
+      `${SUMMARY_SELECT}${whereClause} ORDER BY jobs.created_at DESC`,
       values,
     );
     return result.rows;
@@ -115,25 +141,25 @@ export class JobRepository {
     return row;
   }
 
-  public async findByCompanyId(companyId: string): Promise<JobDetail[]> {
+  public async findByCompanyId(companyId: string): Promise<JobSummary[]> {
     if (!isValidUuid(companyId)) {
       return [];
     }
 
-    const result = await this.database.query<JobDetailRow>(
-      `${DETAIL_SELECT} WHERE jobs.company_id = $1 ORDER BY jobs.created_at DESC`,
+    const result = await this.database.query<JobSummaryRow>(
+      `${SUMMARY_SELECT} WHERE jobs.company_id = $1 ORDER BY jobs.created_at DESC`,
       [companyId],
     );
     return result.rows;
   }
 
-  public async findByCategoryId(categoryId: string): Promise<JobDetail[]> {
+  public async findByCategoryId(categoryId: string): Promise<JobSummary[]> {
     if (!isValidUuid(categoryId)) {
       return [];
     }
 
-    const result = await this.database.query<JobDetailRow>(
-      `${DETAIL_SELECT} WHERE jobs.category_id = $1 ORDER BY jobs.created_at DESC`,
+    const result = await this.database.query<JobSummaryRow>(
+      `${SUMMARY_SELECT} WHERE jobs.category_id = $1 ORDER BY jobs.created_at DESC`,
       [categoryId],
     );
     return result.rows;

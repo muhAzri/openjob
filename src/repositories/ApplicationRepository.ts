@@ -1,6 +1,11 @@
 import type { QueryResultRow } from 'pg';
 import type { Database } from '../config/Database';
-import type { Application, ApplicationStatus } from '../domain/entities/Application';
+import type {
+  Application,
+  ApplicationDetail,
+  ApplicationProfileDetail,
+  ApplicationStatus,
+} from '../domain/entities/Application';
 import type { CreateApplicationPayload } from '../domain/dto/ApplicationDto';
 import { InvariantError, NotFoundError } from '../errors';
 import { isValidUuid } from '../utils/Uuid';
@@ -17,8 +22,36 @@ interface ApplicationRow extends QueryResultRow {
   updated_at: Date;
 }
 
+interface ApplicationDetailRow extends ApplicationRow {
+  job_title: string;
+  company_id: string;
+  company_name: string;
+  category_id: string;
+}
+
+interface ApplicationProfileDetailRow extends ApplicationDetailRow {
+  category_name: string;
+  location_city: string | null;
+}
+
 const SELECT_COLUMNS =
   'id, job_id, user_id, cover_letter, status, resume_filename, resume_original_name, created_at, updated_at';
+
+const DETAIL_COLUMNS = `applications.id, applications.job_id, applications.user_id, applications.cover_letter,
+    applications.status, applications.resume_filename, applications.resume_original_name,
+    applications.created_at, applications.updated_at,
+    jobs.title AS job_title, jobs.company_id, companies.name AS company_name, jobs.category_id`;
+
+const DETAIL_SELECT = `SELECT ${DETAIL_COLUMNS}
+  FROM applications
+  JOIN jobs ON jobs.id = applications.job_id
+  JOIN companies ON companies.id = jobs.company_id`;
+
+const PROFILE_DETAIL_SELECT = `SELECT ${DETAIL_COLUMNS}, categories.name AS category_name, jobs.location_city
+  FROM applications
+  JOIN jobs ON jobs.id = applications.job_id
+  JOIN companies ON companies.id = jobs.company_id
+  JOIN categories ON categories.id = jobs.category_id`;
 
 export class ApplicationRepository {
   constructor(private readonly database: Database) {}
@@ -90,6 +123,66 @@ export class ApplicationRepository {
     const result = await this.database.query<ApplicationRow>(
       `SELECT ${SELECT_COLUMNS} FROM applications WHERE job_id = $1 ORDER BY created_at DESC`,
       [jobId],
+    );
+    return result.rows;
+  }
+
+  public async findAllDetailed(): Promise<ApplicationDetail[]> {
+    const result = await this.database.query<ApplicationDetailRow>(
+      `${DETAIL_SELECT} ORDER BY applications.created_at DESC`,
+    );
+    return result.rows;
+  }
+
+  public async findByIdDetailed(id: string): Promise<ApplicationDetail> {
+    if (!isValidUuid(id)) {
+      throw new NotFoundError('Lamaran tidak ditemukan');
+    }
+
+    const result = await this.database.query<ApplicationDetailRow>(
+      `${DETAIL_SELECT} WHERE applications.id = $1`,
+      [id],
+    );
+
+    const row = result.rows[0];
+    if (row === undefined) {
+      throw new NotFoundError('Lamaran tidak ditemukan');
+    }
+    return row;
+  }
+
+  public async findByUserIdDetailed(userId: string): Promise<ApplicationDetail[]> {
+    if (!isValidUuid(userId)) {
+      return [];
+    }
+
+    const result = await this.database.query<ApplicationDetailRow>(
+      `${DETAIL_SELECT} WHERE applications.user_id = $1 ORDER BY applications.created_at DESC`,
+      [userId],
+    );
+    return result.rows;
+  }
+
+  public async findByJobIdDetailed(jobId: string): Promise<ApplicationDetail[]> {
+    if (!isValidUuid(jobId)) {
+      return [];
+    }
+
+    const result = await this.database.query<ApplicationDetailRow>(
+      `${DETAIL_SELECT} WHERE applications.job_id = $1 ORDER BY applications.created_at DESC`,
+      [jobId],
+    );
+    return result.rows;
+  }
+
+  public async findByUserIdProfileDetailed(userId: string): Promise<ApplicationProfileDetail[]> {
+    if (!isValidUuid(userId)) {
+      return [];
+    }
+
+    const result = await this.database.query<ApplicationProfileDetailRow>(
+      `${PROFILE_DETAIL_SELECT} WHERE applications.user_id = $1 ORDER BY applications.created_at DESC`,
+      [userId],
     );
     return result.rows;
   }

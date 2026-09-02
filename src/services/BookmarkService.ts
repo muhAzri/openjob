@@ -1,6 +1,6 @@
 import type { BookmarkRepository } from '../repositories/BookmarkRepository';
 import type { JobRepository } from '../repositories/JobRepository';
-import type { Bookmark } from '../domain/entities/Bookmark';
+import type { Bookmark, BookmarkDetail } from '../domain/entities/Bookmark';
 import { AuthorizationError, InvariantError, NotFoundError } from '../errors';
 import { CacheService } from './CacheService';
 import { CacheKeys } from '../config/CacheKeys';
@@ -37,8 +37,8 @@ export class BookmarkService {
     return bookmark;
   }
 
-  public async getAllForUser(userId: string): Promise<Bookmark[]> {
-    return await this.bookmarkRepository.findByUserId(userId);
+  public async getAllForUser(userId: string): Promise<BookmarkDetail[]> {
+    return await this.bookmarkRepository.findDetailedByUserId(userId);
   }
 
   public async deleteByUserAndJob(userId: string, jobId: string): Promise<void> {

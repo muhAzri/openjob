@@ -10,6 +10,7 @@ import { CategoryRepository } from '../repositories/CategoryRepository';
 import { JobRepository } from '../repositories/JobRepository';
 import { ApplicationRepository } from '../repositories/ApplicationRepository';
 import { BookmarkRepository } from '../repositories/BookmarkRepository';
+import { DocumentRepository } from '../repositories/DocumentRepository';
 
 import { PasswordHasher } from '../security/PasswordHasher';
 import { TokenManager } from '../security/TokenManager';
@@ -22,6 +23,7 @@ import { JobService } from '../services/JobService';
 import { ApplicationService } from '../services/ApplicationService';
 import { BookmarkService } from '../services/BookmarkService';
 import { ProfileService } from '../services/ProfileService';
+import { DocumentService } from '../services/DocumentService';
 
 import { UserController } from '../controllers/UserController';
 import { AuthenticationController } from '../controllers/AuthenticationController';
@@ -31,6 +33,7 @@ import { JobController } from '../controllers/JobController';
 import { ApplicationController } from '../controllers/ApplicationController';
 import { BookmarkController } from '../controllers/BookmarkController';
 import { ProfileController } from '../controllers/ProfileController';
+import { DocumentController } from '../controllers/DocumentController';
 
 import { AuthMiddleware } from '../middlewares/AuthMiddleware';
 import { ErrorMiddleware } from '../middlewares/ErrorMiddleware';
@@ -43,6 +46,7 @@ import { JobRoutes } from '../routes/JobRoutes';
 import { ApplicationRoutes } from '../routes/ApplicationRoutes';
 import { BookmarkRoutes } from '../routes/BookmarkRoutes';
 import { ProfileRoutes } from '../routes/ProfileRoutes';
+import { DocumentRoutes } from '../routes/DocumentRoutes';
 
 export class App {
   private readonly express: Application;
@@ -70,6 +74,7 @@ export class App {
     const jobRepository = new JobRepository(this.database);
     const applicationRepository = new ApplicationRepository(this.database);
     const bookmarkRepository = new BookmarkRepository(this.database);
+    const documentRepository = new DocumentRepository(this.database);
 
     const passwordHasher = new PasswordHasher();
     const tokenManager = new TokenManager(
@@ -90,6 +95,7 @@ export class App {
     const jobService = new JobService(jobRepository, companyRepository, categoryRepository);
     const applicationService = new ApplicationService(applicationRepository, jobRepository);
     const bookmarkService = new BookmarkService(bookmarkRepository, jobRepository);
+    const documentService = new DocumentService(documentRepository);
     const profileService = new ProfileService(
       userRepository,
       applicationRepository,
@@ -105,6 +111,7 @@ export class App {
     const jobController = new JobController(jobService);
     const applicationController = new ApplicationController(applicationService);
     const bookmarkController = new BookmarkController(bookmarkService);
+    const documentController = new DocumentController(documentService);
     const profileController = new ProfileController(profileService);
 
     this.express.use('/users', new UserRoutes(userController, authMiddleware).register());
@@ -124,6 +131,10 @@ export class App {
     );
     this.express.use('/', new BookmarkRoutes(bookmarkController, authMiddleware).register());
     this.express.use('/profile', new ProfileRoutes(profileController, authMiddleware).register());
+    this.express.use(
+      '/documents',
+      new DocumentRoutes(documentController, authMiddleware).register(),
+    );
   }
 
   private registerFallbackHandlers(): void {

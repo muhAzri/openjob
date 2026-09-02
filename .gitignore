@@ -5,3 +5,5 @@ dist/
 .DS_Store
 uploads/resumes/*
 !uploads/resumes/.gitkeep
+uploads/documents/*
+!uploads/documents/.gitkeep

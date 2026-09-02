@@ -1,5 +1,5 @@
 import type { CompanyRepository } from '../repositories/CompanyRepository';
-import type { Company } from '../domain/entities/Company';
+import type { Company, CompanySummary } from '../domain/entities/Company';
 import type { CreateCompanyPayload, UpdateCompanyPayload } from '../domain/dto/CompanyDto';
 import { AuthorizationError } from '../errors';
 import { CacheService } from './CacheService';
@@ -14,7 +14,7 @@ export class CompanyService {
     return company;
   }
 
-  public async getAll(): Promise<Company[]> {
+  public async getAll(): Promise<CompanySummary[]> {
     return await this.companyRepository.findAll();
   }
 

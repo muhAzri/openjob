@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import type { ApplicationRepository } from '../repositories/ApplicationRepository';
 import type { JobRepository } from '../repositories/JobRepository';
-import type { Application } from '../domain/entities/Application';
+import type { Application, ApplicationDetail } from '../domain/entities/Application';
 import type {
   CreateApplicationPayload,
   UpdateApplicationPayload,
@@ -38,20 +38,20 @@ export class ApplicationService {
     return application;
   }
 
-  public async getAll(): Promise<Application[]> {
-    return await this.applicationRepository.findAll();
+  public async getAll(): Promise<ApplicationDetail[]> {
+    return await this.applicationRepository.findAllDetailed();
   }
 
-  public async getById(id: string): Promise<Application> {
-    return await this.applicationRepository.findById(id);
+  public async getById(id: string): Promise<ApplicationDetail> {
+    return await this.applicationRepository.findByIdDetailed(id);
   }
 
-  public async getByUserId(userId: string): Promise<Application[]> {
-    return await this.applicationRepository.findByUserId(userId);
+  public async getByUserId(userId: string): Promise<ApplicationDetail[]> {
+    return await this.applicationRepository.findByUserIdDetailed(userId);
   }
 
-  public async getByJobId(jobId: string): Promise<Application[]> {
-    return await this.applicationRepository.findByJobId(jobId);
+  public async getByJobId(jobId: string): Promise<ApplicationDetail[]> {
+    return await this.applicationRepository.findByJobIdDetailed(jobId);
   }
 
   public async updateStatus(

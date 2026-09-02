@@ -7,3 +7,5 @@ export interface Company {
   readonly created_at: Date;
   readonly updated_at: Date;
 }
+
+export type CompanySummary = Omit<Company, 'updated_at'>;

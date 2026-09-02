@@ -1,5 +1,5 @@
 {
-  "name": "openjob",
+  "name": "openjob-api",
   "version": "1.0.0",
   "description": "",
   "main": "dist/server.js",
@@ -7,8 +7,6 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "start:dev": "tsx watch src/server.ts",
-    "consumer": "node dist/consumer/index.js",
-    "consumer:dev": "tsx watch src/consumer/index.ts",
     "migrate": "node-pg-migrate -j ts",
     "migrate:up": "node-pg-migrate -j ts up",
     "migrate:down": "node-pg-migrate -j ts down",
@@ -32,7 +30,6 @@
     "joi": "^18.2.5",
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.3.0",
-    "nodemailer": "^9.1.1",
     "pg": "^8.23.0",
     "redis": "^6.2.1"
   },
@@ -50,7 +47,6 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/multer": "^2.2.0",
     "@types/node": "^26.4.0",
-    "@types/nodemailer": "^8.0.1",
     "@types/pg": "^8.23.1",
     "eslint": "^10.9.1",
     "eslint-config-prettier": "^10.1.8",

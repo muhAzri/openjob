@@ -1,8 +1,8 @@
-import { Database } from '../config/Database';
-import { ApplicationRepository } from '../repositories/ApplicationRepository';
-import { JobRepository } from '../repositories/JobRepository';
-import { UserRepository } from '../repositories/UserRepository';
-import { EmailService } from '../services/EmailService';
+import { Database } from './config/Database';
+import { ApplicationRepository } from './repositories/ApplicationRepository';
+import { JobRepository } from './repositories/JobRepository';
+import { UserRepository } from './repositories/UserRepository';
+import { EmailService } from './services/EmailService';
 import { ApplicationConsumer } from './ApplicationConsumer';
 
 async function main(): Promise<void> {

@@ -21,11 +21,6 @@ class EnvConfig {
   public readonly rabbitmqPassword: string;
   public readonly applicationsQueue: string;
 
-  public readonly mailHost: string;
-  public readonly mailPort: number;
-  public readonly mailUser: string;
-  public readonly mailPassword: string;
-
   constructor() {
     this.host = this.readRequired('HOST');
     this.port = Number(this.readRequired('PORT'));
@@ -53,11 +48,6 @@ class EnvConfig {
       process.env['AMQP_URL'] ??
       `amqp://${this.rabbitmqUser}:${this.rabbitmqPassword}@${this.rabbitmqHost}:${this.rabbitmqPort}`;
     this.applicationsQueue = process.env['APPLICATIONS_QUEUE'] ?? 'applications_queue';
-
-    this.mailHost = this.readRequired('MAIL_HOST');
-    this.mailPort = Number(process.env['MAIL_PORT'] ?? 587);
-    this.mailUser = this.readRequired('MAIL_USER');
-    this.mailPassword = this.readRequired('MAIL_PASSWORD');
   }
 
   private readRequired(key: string): string {

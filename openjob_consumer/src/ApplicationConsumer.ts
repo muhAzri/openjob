@@ -1,10 +1,10 @@
 import type { ConsumeMessage } from 'amqplib';
-import { RabbitMQConnection } from '../config/RabbitMQConnection';
-import { envConfig } from '../config/EnvConfig';
-import type { ApplicationRepository } from '../repositories/ApplicationRepository';
-import type { JobRepository } from '../repositories/JobRepository';
-import type { UserRepository } from '../repositories/UserRepository';
-import type { EmailService } from '../services/EmailService';
+import { RabbitMQConnection } from './config/RabbitMQConnection';
+import { envConfig } from './config/EnvConfig';
+import type { ApplicationRepository } from './repositories/ApplicationRepository';
+import type { JobRepository } from './repositories/JobRepository';
+import type { UserRepository } from './repositories/UserRepository';
+import type { EmailService } from './services/EmailService';
 
 interface ApplicationCreatedMessage {
   readonly application_id: string;

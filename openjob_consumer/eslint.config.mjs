@@ -6,7 +6,7 @@ import globals from 'globals';
 
 export default tseslint.config(
   {
-    ignores: ['dist/**', 'node_modules/**', 'uploads/**', 'coverage/**'],
+    ignores: ['dist/**', 'node_modules/**', 'coverage/**'],
   },
   js.configs.recommended,
   ...tseslint.configs.strictTypeChecked,
@@ -46,14 +46,13 @@ export default tseslint.config(
       '@typescript-eslint/switch-exhaustiveness-check': 'error',
 
       // This codebase groups related static helpers under a class as a namespace
-      // (middlewares, validators, cache keys, connection singletons). That is a
-      // deliberate, consistent convention here, not an accidental empty class.
+      // (connection singletons, repositories). That is a deliberate, consistent
+      // convention here, not an accidental empty class.
       '@typescript-eslint/no-extraneous-class': 'off',
       // Singleton/static-only classes intentionally use a private empty
       // constructor to block `new`.
       '@typescript-eslint/no-empty-function': ['error', { allow: ['constructors'] }],
-      // req.params / process.env are index-signature dictionaries; bracket
-      // notation communicates that intent better than dot notation here.
+      // req.params-like index-signature dictionaries read better with bracket notation.
       '@typescript-eslint/dot-notation': ['error', { allowIndexSignaturePropertyAccess: true }],
       // Interpolating numbers (ports, ids) into template literals is safe.
       '@typescript-eslint/restrict-template-expressions': ['error', { allowNumber: true }],
@@ -66,16 +65,6 @@ export default tseslint.config(
     },
   },
   {
-    files: ['migrations/**/*.ts'],
-    rules: {
-      // Migration files are invoked by node-pg-migrate, not imported by our own code.
-      'n/no-unpublished-import': 'off',
-      // node-pg-migrate's up/down signature is async regardless of whether a
-      // given migration awaits anything internally.
-      '@typescript-eslint/require-await': 'off',
-    },
-  },
-  {
     files: ['*.mjs', '*.config.mjs'],
     extends: [tseslint.configs.disableTypeChecked],
     rules: {
@@ -85,9 +74,9 @@ export default tseslint.config(
     },
   },
   {
-    files: ['src/server.ts', 'src/consumer/index.ts'],
+    files: ['src/index.ts'],
     rules: {
-      // These are process entrypoints: exiting after logging a fatal
+      // This is the process entrypoint: exiting after logging a fatal
       // startup failure is the standard Node pattern here, not a library
       // misbehaving.
       'n/no-process-exit': 'off',

@@ -1,6 +1,7 @@
 import type { QueryResultRow } from 'pg';
 import type { Database } from '../config/Database';
 import type { User, UserRole } from '../domain/entities/User';
+import type { UpdateUserPayload } from '../domain/dto/AuthDto';
 import { InvariantError, NotFoundError } from '../errors';
 import { isValidUuid } from '../utils/Uuid';
 
@@ -63,6 +64,32 @@ export class UserRepository {
     const result = await this.database.query<UserRow>(
       `SELECT ${SELECT_COLUMNS} FROM users WHERE email = $1`,
       [email],
+    );
+
+    const row = result.rows[0];
+    if (row === undefined) {
+      throw new NotFoundError('User tidak ditemukan');
+    }
+    return row;
+  }
+
+  public async isEmailAvailableForUpdate(email: string, excludingUserId: string): Promise<boolean> {
+    const result = await this.database.query<QueryResultRow>(
+      'SELECT id FROM users WHERE email = $1 AND id != $2',
+      [email, excludingUserId],
+    );
+    return result.rowCount === 0;
+  }
+
+  public async update(id: string, payload: UpdateUserPayload): Promise<User> {
+    const existing = await this.findById(id);
+
+    const result = await this.database.query<UserRow>(
+      `UPDATE users
+       SET name = $1, email = $2, updated_at = now()
+       WHERE id = $3
+       RETURNING ${SELECT_COLUMNS}`,
+      [payload.name ?? existing.name, payload.email ?? existing.email, id],
     );
 
     const row = result.rows[0];

@@ -2,6 +2,8 @@ import type { BookmarkRepository } from '../repositories/BookmarkRepository';
 import type { JobRepository } from '../repositories/JobRepository';
 import type { Bookmark } from '../domain/entities/Bookmark';
 import { AuthorizationError, InvariantError, NotFoundError } from '../errors';
+import { CacheService } from './CacheService';
+import { CacheKeys } from '../config/CacheKeys';
 
 export class BookmarkService {
   constructor(
@@ -17,7 +19,9 @@ export class BookmarkService {
       throw new InvariantError('Job ini sudah ada di bookmark Anda');
     }
 
-    return this.bookmarkRepository.create(userId, jobId);
+    const bookmark = await this.bookmarkRepository.create(userId, jobId);
+    await CacheService.del(CacheKeys.bookmarksByUser(userId));
+    return bookmark;
   }
 
   public async getDetail(userId: string, jobId: string, bookmarkId: string): Promise<Bookmark> {
@@ -39,5 +43,6 @@ export class BookmarkService {
 
   public async deleteByUserAndJob(userId: string, jobId: string): Promise<void> {
     await this.bookmarkRepository.deleteByUserAndJob(userId, jobId);
+    await CacheService.del(CacheKeys.bookmarksByUser(userId));
   }
 }

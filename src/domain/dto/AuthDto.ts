@@ -7,6 +7,11 @@ export interface RegisterUserPayload {
   readonly role?: UserRole;
 }
 
+export interface UpdateUserPayload {
+  readonly name?: string;
+  readonly email?: string;
+}
+
 export interface LoginPayload {
   readonly email: string;
   readonly password: string;

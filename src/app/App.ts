@@ -103,7 +103,7 @@ export class App {
     const bookmarkController = new BookmarkController(bookmarkService);
     const profileController = new ProfileController(profileService);
 
-    this.express.use('/users', new UserRoutes(userController).register());
+    this.express.use('/users', new UserRoutes(userController, authMiddleware).register());
     this.express.use('/authentications', new AuthenticationRoutes(authenticationController, authMiddleware).register());
     this.express.use('/companies', new CompanyRoutes(companyController, authMiddleware).register());
     this.express.use('/categories', new CategoryRoutes(categoryController, authMiddleware).register());

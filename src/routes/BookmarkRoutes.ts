@@ -2,6 +2,8 @@ import { Router } from 'express';
 import type { Routes } from './Routes';
 import type { BookmarkController } from '../controllers/BookmarkController';
 import type { AuthMiddleware } from '../middlewares/AuthMiddleware';
+import { CacheMiddleware } from '../middlewares/CacheMiddleware';
+import { CacheKeys } from '../config/CacheKeys';
 
 export class BookmarkRoutes implements Routes {
   constructor(
@@ -12,7 +14,12 @@ export class BookmarkRoutes implements Routes {
   public register(): Router {
     const router = Router();
 
-    router.get('/bookmarks', this.authMiddleware.authenticate, this.controller.getBookmarks);
+    router.get(
+      '/bookmarks',
+      this.authMiddleware.authenticate,
+      CacheMiddleware.cache((req) => CacheKeys.bookmarksByUser(req.user?.id ?? 'anonymous')),
+      this.controller.getBookmarks,
+    );
 
     router.post(
       '/jobs/:jobId/bookmark',

@@ -11,11 +11,14 @@ interface ApplicationRow extends QueryResultRow {
   user_id: string;
   cover_letter: string | null;
   status: ApplicationStatus;
+  resume_filename: string | null;
+  resume_original_name: string | null;
   created_at: Date;
   updated_at: Date;
 }
 
-const SELECT_COLUMNS = 'id, job_id, user_id, cover_letter, status, created_at, updated_at';
+const SELECT_COLUMNS =
+  'id, job_id, user_id, cover_letter, status, resume_filename, resume_original_name, created_at, updated_at';
 
 export class ApplicationRepository {
   constructor(private readonly database: Database) {}
@@ -115,5 +118,24 @@ export class ApplicationRepository {
     if (result.rowCount === 0) {
       throw new NotFoundError('Lamaran tidak ditemukan');
     }
+  }
+
+  public async attachResume(
+    id: string,
+    resumeFilename: string,
+    resumeOriginalName: string,
+  ): Promise<Application> {
+    const result = await this.database.query<ApplicationRow>(
+      `UPDATE applications SET resume_filename = $1, resume_original_name = $2, updated_at = now()
+       WHERE id = $3
+       RETURNING ${SELECT_COLUMNS}`,
+      [resumeFilename, resumeOriginalName, id],
+    );
+
+    const row = result.rows[0];
+    if (row === undefined) {
+      throw new NotFoundError('Lamaran tidak ditemukan');
+    }
+    return row;
   }
 }

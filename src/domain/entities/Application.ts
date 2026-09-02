@@ -6,6 +6,8 @@ export interface Application {
   readonly user_id: string;
   readonly cover_letter: string | null;
   readonly status: ApplicationStatus;
+  readonly resume_filename: string | null;
+  readonly resume_original_name: string | null;
   readonly created_at: Date;
   readonly updated_at: Date;
 }
